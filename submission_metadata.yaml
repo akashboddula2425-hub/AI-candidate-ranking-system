@@ -1,0 +1,82 @@
+# Redrob Hackathon — Submission Metadata
+# >>> FILL IN the TODO fields before submitting via the portal. <<<
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "TODO-your-team-name"
+
+primary_contact:
+  name: "TODO-your-full-name"
+  email: "akashboddula2425@gmail.com"
+  phone: "TODO-+91-XXXXXXXXXX"
+
+team_members:
+  - name: "TODO-your-full-name"
+    email: "akashboddula2425@gmail.com"
+    role: "ML Engineer"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "TODO-https://github.com/YOUR_USERNAME/redrob-ranker"
+
+sandbox_link: "TODO-https://huggingface.co/spaces/YOUR_USERNAME/redrob-ranker"
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Local Windows 11 box"
+  cpu_cores: 12
+  ram_gb: 16
+  python_version: "3.14.4"
+  os: "Windows 11"
+  uses_gpu_for_inference: false           # CPU-only ranking
+  has_network_during_ranking: false       # no API calls during ranking
+  pre_computation_required: true          # embeddings built offline by build_index.py
+  pre_computation_time_minutes: 30        # ~30 min to embed 100K profiles on CPU
+
+# ============================================================================
+# AI tools declaration (transparency only — honest declaration is not penalised)
+# ============================================================================
+ai_tools_used:
+  - "Claude"
+
+ai_usage_summary: |
+  Claude (Claude Code) was used as a pair-programmer: data exploration of the 100K
+  pool, architectural discussion, drafting and reviewing the scoring/feature code,
+  and writing documentation. All design decisions, the JD-derived lexicons and
+  weights, the trap/honeypot heuristics, and the final tuning are the team's own
+  engineering. No candidate data was sent to any hosted LLM, and the ranking step
+  itself makes zero LLM/API calls.
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  Hybrid ranker = dense semantic recall + structured recruiter-style precision.
+  A pre-computed sentence-transformer (all-MiniLM-L6-v2) index gives cosine
+  similarity between each profile and a distilled JD query, surfacing genuine
+  "plain-language Tier-5" fits who describe building ranking/retrieval systems
+  without using buzzwords. On top, a structured fit model reads title-vs-career
+  reality, what the candidate actually built (retrieval/ranking/recsys evidence in
+  their own words, with AI-skill credit GATED by title credibility so keyword
+  stuffers earn nothing), the 5-9y experience band, product-vs-services history,
+  and location. Behavioural signals become an availability multiplier (the JD says
+  to down-weight unreachable candidates). Integrity guards crush impossible
+  honeypots (tenure exceeding the dates; "expert" with 0 months) and keyword
+  stuffers. Final score blends fit with the multipliers; the ranking step is pure
+  numpy over the pre-computed index and runs in well under 5 min on CPU.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true
