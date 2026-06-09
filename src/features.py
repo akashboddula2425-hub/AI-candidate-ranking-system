@@ -87,7 +87,9 @@ def domain_fit(cand, title_score: float) -> tuple[float, dict]:
 
     # Skills list: count core+ml concepts present as skill names, but gate the credit
     # by how credible the candidate's title/career is (anti keyword-stuffer).
-    skill_blob = " " + " ".join(cand.skill_set) + " "
+    # Join in deterministic order with a separator so concepts can't match across two
+    # adjacent skill names (and so the result is reproducible run-to-run).
+    skill_blob = " | " + " | ".join(cand.skill_list) + " | "
     sk_core, _ = _weighted_hits(skill_blob, jd_spec.CONCEPTS_CORE)
     sk_ml, _ = _weighted_hits(skill_blob, jd_spec.CONCEPTS_ML)
     gate = min(1.0, 0.15 + title_score)          # 0.15 floor .. up to ~1.15→1.0

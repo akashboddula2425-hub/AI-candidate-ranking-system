@@ -105,7 +105,7 @@ def all_titles(cand: dict):
 class Candidate:
     """Lightweight parsed view, computed once per candidate."""
     __slots__ = ("raw", "id", "profile", "signals", "career", "skills",
-                 "doc", "ctext", "titles", "skill_set", "yoe")
+                 "doc", "ctext", "titles", "skill_set", "skill_list", "yoe")
 
     def __init__(self, raw: dict):
         self.raw = raw
@@ -117,5 +117,8 @@ class Candidate:
         self.doc = build_document(raw)
         self.ctext = career_text(raw)
         self.titles = all_titles(raw)
-        self.skill_set = set(skill_names(raw))
+        # ordered, de-duplicated skill names: deterministic for any output/joining.
+        # (skill_set is kept for fast membership tests where order is irrelevant.)
+        self.skill_list = list(dict.fromkeys(skill_names(raw)))
+        self.skill_set = set(self.skill_list)
         self.yoe = float(self.profile.get("years_of_experience", 0) or 0)

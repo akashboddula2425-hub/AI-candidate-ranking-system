@@ -59,7 +59,7 @@ def _found_evidence(cand, limit=2):
 
 def _named_skills(cand, limit=3):
     out = []
-    for s in cand.skill_set:
+    for s in cand.skill_list:          # original profile order → deterministic
         if s in _SKILL_DISPLAY:
             out.append(_SKILL_DISPLAY[s])
         if len(out) >= limit:
