@@ -1,0 +1,32 @@
+# data — do NOT commit the candidate pool (released separately by organisers)
+candidates.jsonl
+candidates.jsonl.gz
+data/*.jsonl
+data/artifacts_test/
+docs_extracted/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# os
+.DS_Store
+Thumbs.db
+
+# keep embeddings.f16.npy + candidate_ids.npy + jd_vectors.npy (rank.py needs them,
+# ~78 MB total, under GitHub's 100 MB limit). Exclude the FAISS index: it is 153 MB
+# (> GitHub's limit) and rank.py does NOT need it — build_index.py regenerates it.
+artifacts/faiss.index
+artifacts/build_log.txt
+
+# local scratch
+data/sub_test.csv
+data/*_test.csv
+
+# deck scratch + node
+docs/slides_png/
+docs/node_modules/
+node_modules/

@@ -1,0 +1,22 @@
+# Redrob candidate ranker — dependencies
+#
+# The RANKING step (rank.py) needs only numpy (+ scikit-learn for the TF-IDF
+# fallback). The dense-embedding artifacts are pre-computed offline by
+# build_index.py, which additionally needs sentence-transformers / torch / faiss.
+#
+# Tested on Python 3.14.4 with the exact versions in the comments below; the ranges
+# are what we believe reproduce cleanly on a CPU-only 16 GB machine.
+
+# --- required at ranking time ---
+numpy>=1.26            # tested 2.4.4
+scikit-learn>=1.3      # tested 1.8.0  (TF-IDF fallback only)
+
+# --- required to (re)build embedding artifacts offline ---
+sentence-transformers>=2.2   # tested 5.4.0
+torch>=2.0                   # tested 2.11.0+cpu  (CPU wheel is fine)
+faiss-cpu>=1.7               # tested 1.13.2
+
+# --- optional: sandbox demo (app.py) ---
+streamlit>=1.30
+pandas>=2.0            # tested 3.0.2
+pyyaml>=6.0
