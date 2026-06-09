@@ -30,3 +30,6 @@ data/*_test.csv
 docs/slides_png/
 docs/node_modules/
 node_modules/
+
+# claude code session data
+.claude/
