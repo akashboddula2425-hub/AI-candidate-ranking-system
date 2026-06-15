@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Redrob Candidate Ranker — Project Guide</title>
+<style>
+  :root{
+    --ink:#0F1B3C; --navy:#1E2761; --teal:#00C2A8; --cyan:#3DA9FC;
+    --slate:#33415C; --muted:#7C879B; --card:#F4F7FB; --line:#E2E8F2;
+    --red:#F4795B; --amber:#F4A93B; --violet:#9B8CFF;
+  }
+  *{ box-sizing:border-box; }
+  @page{ size:A4; margin:13mm 12mm; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--slate);
+    font-size:11.4px; line-height:1.5;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  h1,h2,h3{ color:var(--ink); font-family:Georgia,"Times New Roman",serif; margin:0; }
+  .kicker{ color:var(--teal); font-weight:700; letter-spacing:1.5px; font-size:10px; text-transform:uppercase; }
+  section{ page-break-inside:auto; }
+  .page-break{ page-break-before:always; }
+  h2.sec{ font-size:21px; margin:0 0 3px; }
+  h3{ font-size:14px; margin:14px 0 5px; color:var(--navy); }
+  p{ margin:6px 0; }
+  .lead{ font-size:12.2px; color:var(--slate); }
+  .num{ display:inline-block; width:22px;height:22px;line-height:22px;text-align:center;
+        background:var(--ink); color:var(--teal); border-radius:50%; font-weight:700;
+        font-family:Georgia,serif; margin-right:7px; font-size:12px; vertical-align:middle;}
+  ul{ margin:6px 0 6px 0; padding-left:20px; }
+  li{ margin:3px 0; }
+  b,strong{ color:var(--ink); }
+  code,.mono{ font-family:Consolas,"Courier New",monospace; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:9px; padding:11px 14px; margin:9px 0; }
+  .callout{ background:#EAFBF7; border:1px solid #Bfeee5; border-left:4px solid var(--teal);
+            border-radius:7px; padding:9px 13px; margin:10px 0; }
+  .warn{ background:#FDEEE9; border:1px solid #F6C9bb; border-left:4px solid var(--red);
+            border-radius:7px; padding:9px 13px; margin:10px 0; }
+  table{ width:100%; border-collapse:collapse; margin:9px 0; font-size:10.8px; }
+  th{ background:var(--ink); color:#fff; text-align:left; padding:7px 9px; font-weight:600; }
+  td{ padding:7px 9px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tr:nth-child(even) td{ background:#FAFCFE; }
+  .pill{ display:inline-block; padding:1px 8px; border-radius:20px; font-size:9.5px; font-weight:700; color:#fff;}
+  .grid2{ display:flex; gap:12px; } .grid2>div{ flex:1; }
+  .tree{ font-family:Consolas,monospace; font-size:10px; line-height:1.55; background:var(--ink); color:#D8E2F5;
+         border-radius:9px; padding:13px 15px; white-space:pre; overflow:hidden; }
+  .tree .c{ color:var(--teal); } .tree .m{ color:#8A94A6; }
+  .codeblock{ background:var(--ink); color:#E6ECF8; border-radius:9px; padding:12px 14px; margin:8px 0;
+              font-family:Consolas,monospace; font-size:10.5px;
+              white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; }
+  .codeblock .cm{ color:var(--teal); } .codeblock .fl{ color:var(--amber); }
+  .small{ font-size:10px; color:var(--muted); }
+  .statrow{ display:flex; gap:10px; margin:10px 0; }
+  .stat{ flex:1; background:var(--ink); border-radius:9px; padding:10px 12px; color:#fff; }
+  .stat .big{ font-family:Georgia,serif; font-size:20px; font-weight:700; color:var(--teal); }
+  .stat .lbl{ font-size:9.5px; color:#CADCFC; }
+  .cover{ background:var(--ink); color:#fff; border-radius:14px; padding:34px 30px; margin-bottom:14px; position:relative; overflow:hidden;}
+  .cover h1{ color:#fff; font-size:34px; line-height:1.05; margin:10px 0 8px; }
+  .cover .sub{ color:#CADCFC; font-size:13px; max-width:80%; }
+  .cover .dot{ position:absolute; border-radius:50%; }
+  svg{ width:100%; height:auto; display:block; margin:6px 0 2px; }
+  .figcap{ font-size:9.5px; color:var(--muted); text-align:center; margin:0 0 6px; }
+  .toc div{ padding:3px 0; border-bottom:1px dashed var(--line); }
+  .toc .n{ color:var(--teal); font-weight:700; font-family:Georgia,serif; }
+</style>
+</head>
+<body>
+
+<!-- ============================== COVER ============================== -->
+<div class="cover">
+  <div class="dot" style="width:230px;height:230px;background:#1E2761;right:-70px;top:-90px;"></div>
+  <div class="dot" style="width:140px;height:140px;background:#16204A;right:30px;bottom:-70px;"></div>
+  <div class="kicker" style="color:#00C2A8;">Project Guide · Intelligent Candidate Discovery &amp; Ranking</div>
+  <h1>The Redrob Candidate Ranker</h1>
+  <div class="sub">An AI system that ranks job candidates the way a great recruiter would —
+  by understanding what a role actually needs, not by matching keywords. This guide explains
+  the idea from scratch, why it matters in the real world, the technology, the pipeline, the
+  project structure, and exactly how to run it.</div>
+</div>
+<div class="statrow">
+  <div class="stat"><div class="big">100,000</div><div class="lbl">candidates ranked</div></div>
+  <div class="stat"><div class="big">Top 100</div><div class="lbl">trusted shortlist + reasons</div></div>
+  <div class="stat"><div class="big">~37 s</div><div class="lbl">on a normal laptop CPU</div></div>
+  <div class="stat"><div class="big">Hybrid</div><div class="lbl">meaning + rules + signals</div></div>
+</div>
+<div class="card toc">
+  <b style="color:var(--ink)">What's inside</b>
+  <div><span class="n">1</span> The core idea — explained from scratch</div>
+  <div><span class="n">2</span> Why it's useful in the real world</div>
+  <div><span class="n">3</span> How it works — the pipeline (flowchart)</div>
+  <div><span class="n">4</span> How a candidate is scored (decision flowchart)</div>
+  <div><span class="n">5</span> Technology stack</div>
+  <div><span class="n">6</span> Project structure</div>
+  <div><span class="n">7</span> How &amp; where to run it (commands + platforms)</div>
+  <div><span class="n">8</span> What it produces &amp; quick reference</div>
+</div>
+
+<!-- ============================== 1. CORE IDEA ============================== -->
+<section class="page-break">
+<div class="kicker">Section 1</div>
+<h2 class="sec">The core idea — from scratch</h2>
+
+<p class="lead">A company posts one job. Thousands of people are in the talent pool. A recruiter can
+only personally read a handful. So how do you find the <b>few people who genuinely fit</b> — fast,
+fairly, and without missing the quiet gems?</p>
+
+<h3>The problem with the old way</h3>
+<p>Most hiring tools work by <b>keyword matching</b>: the job says "RAG, Pinecone, embeddings", so the
+tool returns everyone who typed those words on their profile. This breaks in two directions:</p>
+<ul>
+  <li><b>False positives</b> — a Marketing Manager who took an online course and listed "RAG, Pinecone,
+  FAISS" looks like a perfect match to a keyword filter, but cannot do the job.</li>
+  <li><b>False negatives</b> — the best engineer may describe their work in plain English
+  ("I built the systems that decide what users see") and <i>never use the buzzword</i> — so a keyword
+  filter skips them entirely.</li>
+</ul>
+
+<h3>The insight this project is built on</h3>
+<div class="callout">
+A job description <b>says one thing but means another</b>. The real signal of fit is not the words in a
+skills list — it is <b>what a person actually built</b> (their career history), <b>whether they're a
+genuine fit</b> for the role's intent, and <b>whether they're actually reachable and available</b>.
+Buzzwords are noise; evidence and availability are signal.
+</div>
+
+<h3>What this system does, in one sentence</h3>
+<p>It reads every candidate's full profile, <b>understands</b> it (using AI language models that grasp
+meaning, not just words), cross-checks it against a structured model of what the role truly needs,
+<b>throws out the fakes and impossible profiles</b>, accounts for who is actually available, and returns
+a ranked shortlist of the top 100 — each with a short, honest reason.</p>
+
+<div class="grid2">
+  <div class="card">
+    <b style="color:var(--red)">✕ A keyword-stuffer</b>
+    <p class="small" style="margin-top:4px">"Project Manager · AI enthusiast." Skills list full of RAG,
+    Pinecone, FAISS. Summary: "took online courses on RAG." <br><b>→ our system scores it ~0.04 (buried)</b></p>
+  </div>
+  <div class="card">
+    <b style="color:var(--teal)">✓ A real fit in plain words</b>
+    <p class="small" style="margin-top:4px">"Senior AI Engineer who built the ranking and retrieval
+    systems that decide what to show." Never says "RAG". <br><b>→ our system scores it ~0.80 (top)</b></p>
+  </div>
+</div>
+</section>
+
+<!-- ============================== 2. REAL WORLD ============================== -->
+<section class="page-break">
+<div class="kicker">Section 2</div>
+<h2 class="sec">Why it's useful in the real world</h2>
+
+<p class="lead">This is not just a contest entry — it is a blueprint for the "intelligence layer" of any
+modern hiring or talent product.</p>
+
+<table>
+  <tr><th style="width:26%">Where it helps</th><th>What it does in practice</th></tr>
+  <tr><td><b>Recruiting platforms &amp; job boards</b></td><td>Powers the search that decides which candidates
+    a recruiter sees first — surfacing genuine fits instead of the loudest keyword profiles.</td></tr>
+  <tr><td><b>Applicant tracking (ATS)</b></td><td>Auto-ranks incoming applicants for a role so recruiters
+    spend their limited time on the most promising people.</td></tr>
+  <tr><td><b>Sourcing / headhunting</b></td><td>Scans a large pool and pulls out hidden gems who describe
+    their work in plain language and would be missed by keyword tools.</td></tr>
+  <tr><td><b>Internal mobility</b></td><td>Matches existing employees to new internal openings based on
+    what they've actually done.</td></tr>
+</table>
+
+<h3>The concrete benefits</h3>
+<div class="grid2">
+  <div>
+    <ul>
+      <li><b>Saves time</b> — turns thousands of profiles into a trustworthy top-100 in seconds.</li>
+      <li><b>Finds hidden talent</b> — semantic understanding catches strong people who don't self-market.</li>
+      <li><b>Filters fakes</b> — rejects buzzword-stuffers and logically impossible profiles automatically.</li>
+    </ul>
+  </div>
+  <div>
+    <ul>
+      <li><b>Explainable &amp; auditable</b> — every pick comes with a reason and every score can be traced,
+      which matters for trust and fair-hiring compliance.</li>
+      <li><b>Cheap &amp; scalable</b> — runs on an ordinary CPU with no paid AI API calls in the loop, so it
+      scales to hundreds of thousands of profiles.</li>
+      <li><b>Respects availability</b> — won't push someone who hasn't logged in for 6 months to the top.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout"><b>Who wins:</b> recruiters (less noise), hiring managers (better shortlists),
+companies (faster, cheaper hiring), and candidates (a fairer shot judged on real evidence, not buzzword bingo).</div>
+</section>
+
+<!-- ============================== 3. PIPELINE ============================== -->
+<section class="page-break">
+<div class="kicker">Section 3</div>
+<h2 class="sec">How it works — the pipeline</h2>
+<p class="lead">There are two phases. A one-time <b>offline</b> phase prepares the AI understanding of every
+profile. Then the fast <b>ranking</b> phase (the part you run for each job) scores everyone and writes the
+shortlist. No internet, no GPU, and no per-candidate AI API calls are needed during ranking.</p>
+
+<!-- FLOWCHART 1: end to end -->
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Calibri,sans-serif">
+  <defs>
+    <marker id="arT" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#00C2A8"/></marker>
+  </defs>
+  <!-- input -->
+  <rect x="250" y="8" width="220" height="40" rx="8" fill="#1E2761"/>
+  <text x="360" y="26" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">candidates.jsonl</text>
+  <text x="360" y="40" fill="#CADCFC" font-size="10" text-anchor="middle">100,000 candidate profiles</text>
+  <line x1="360" y1="48" x2="360" y2="66" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT)"/>
+
+  <!-- OFFLINE box -->
+  <rect x="40" y="70" width="640" height="86" rx="10" fill="#F4F7FB" stroke="#E2E8F2"/>
+  <rect x="40" y="70" width="150" height="86" rx="10" fill="#10262A"/>
+  <text x="115" y="104" fill="#00C2A8" font-size="11" font-weight="700" text-anchor="middle">OFFLINE</text>
+  <text x="115" y="120" fill="#CADCFC" font-size="9" text-anchor="middle">build_index.py</text>
+  <text x="115" y="133" fill="#8A94A6" font-size="8.5" text-anchor="middle">run once · ~20 min</text>
+  <!-- offline steps -->
+  <rect x="206" y="92" width="130" height="42" rx="7" fill="#fff" stroke="#E2E8F2"/>
+  <text x="271" y="110" fill="#0F1B3C" font-size="10" font-weight="700" text-anchor="middle">Read each profile</text>
+  <text x="271" y="124" fill="#7C879B" font-size="8.5" text-anchor="middle">headline+summary+career</text>
+  <line x1="336" y1="113" x2="356" y2="113" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT)"/>
+  <rect x="358" y="92" width="140" height="42" rx="7" fill="#fff" stroke="#E2E8F2"/>
+  <text x="428" y="110" fill="#0F1B3C" font-size="10" font-weight="700" text-anchor="middle">AI embedding model</text>
+  <text x="428" y="124" fill="#7C879B" font-size="8.5" text-anchor="middle">all-MiniLM-L6-v2</text>
+  <line x1="498" y1="113" x2="518" y2="113" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT)"/>
+  <rect x="520" y="92" width="146" height="42" rx="7" fill="#fff" stroke="#E2E8F2"/>
+  <text x="593" y="110" fill="#0F1B3C" font-size="10" font-weight="700" text-anchor="middle">Save index</text>
+  <text x="593" y="124" fill="#7C879B" font-size="8.5" text-anchor="middle">embeddings + FAISS</text>
+
+  <line x1="360" y1="156" x2="360" y2="176" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT)"/>
+
+  <!-- RANKING box -->
+  <rect x="40" y="180" width="640" height="120" rx="10" fill="#F4F7FB" stroke="#E2E8F2"/>
+  <rect x="40" y="180" width="150" height="120" rx="10" fill="#0F1B3C"/>
+  <text x="115" y="226" fill="#00C2A8" font-size="11" font-weight="700" text-anchor="middle">RANKING</text>
+  <text x="115" y="242" fill="#CADCFC" font-size="9" text-anchor="middle">rank.py</text>
+  <text x="115" y="255" fill="#8A94A6" font-size="8.5" text-anchor="middle">every run · ~37 s · CPU</text>
+  <!-- four lanes -->
+  <g font-size="9" text-anchor="middle">
+    <rect x="206" y="192" width="112" height="30" rx="6" fill="#00C2A8"/><text x="262" y="211" fill="#0F1B3C" font-weight="700">Dense semantic</text>
+    <rect x="206" y="226" width="112" height="30" rx="6" fill="#3DA9FC"/><text x="262" y="245" fill="#0F1B3C" font-weight="700">Structured fit</text>
+    <rect x="206" y="260" width="112" height="30" rx="6" fill="#F4795B"/><text x="262" y="279" fill="#fff" font-weight="700">Integrity guards</text>
+    <rect x="332" y="226" width="112" height="30" rx="6" fill="#F4A93B"/><text x="388" y="245" fill="#0F1B3C" font-weight="700">Behavioural</text>
+  </g>
+  <!-- combine -->
+  <line x1="318" y1="207" x2="452" y2="237" stroke="#9aa6bd" stroke-width="1.3"/>
+  <line x1="318" y1="241" x2="452" y2="241" stroke="#9aa6bd" stroke-width="1.3"/>
+  <line x1="318" y1="275" x2="452" y2="245" stroke="#9aa6bd" stroke-width="1.3"/>
+  <line x1="444" y1="241" x2="454" y2="241" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT)"/>
+  <rect x="456" y="218" width="92" height="46" rx="7" fill="#1E2761"/>
+  <text x="502" y="238" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">Combine</text>
+  <text x="502" y="252" fill="#CADCFC" font-size="8.5" text-anchor="middle">final score</text>
+  <line x1="548" y1="241" x2="566" y2="241" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT)"/>
+  <rect x="568" y="210" width="98" height="62" rx="7" fill="#fff" stroke="#E2E8F2"/>
+  <text x="617" y="232" fill="#0F1B3C" font-size="10" font-weight="700" text-anchor="middle">Sort &amp; pick</text>
+  <text x="617" y="247" fill="#7C879B" font-size="8.5" text-anchor="middle">top 100 +</text>
+  <text x="617" y="259" fill="#7C879B" font-size="8.5" text-anchor="middle">write reasons</text>
+
+  <line x1="360" y1="300" x2="360" y2="320" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT)"/>
+  <!-- output -->
+  <rect x="250" y="322" width="220" height="34" rx="8" fill="#00C2A8"/>
+  <text x="360" y="344" fill="#0F1B3C" font-size="12" font-weight="700" text-anchor="middle">submission.csv — top 100 + reasoning</text>
+</svg>
+<div class="figcap">Figure 1 — End-to-end pipeline: a one-time offline embedding step, then a fast CPU-only ranking step.</div>
+
+<h3>Step by step</h3>
+<ul>
+  <li><b>① Offline — understand every profile (once).</b> <code>build_index.py</code> feeds each profile
+  through a small AI language model (<i>all-MiniLM-L6-v2</i>) that turns text into a 384-number
+  "meaning fingerprint" (an <i>embedding</i>). These are saved so ranking never has to recompute them.</li>
+  <li><b>② Load.</b> <code>rank.py</code> streams all 100,000 profiles into memory.</li>
+  <li><b>③ Score on four lanes</b> (explained in Section 4): <span class="pill" style="background:#00C2A8;color:#0F1B3C">meaning</span>
+  <span class="pill" style="background:#3DA9FC;color:#0F1B3C">fit rules</span>
+  <span class="pill" style="background:#F4795B">fraud guards</span>
+  <span class="pill" style="background:#F4A93B;color:#0F1B3C">availability</span>.</li>
+  <li><b>④ Combine</b> the lanes into one final score per candidate.</li>
+  <li><b>⑤ Sort &amp; shortlist</b> — take the top 100 and write a specific, honest reason for each.</li>
+</ul>
+</section>
+
+<!-- ============================== 4. SCORING ============================== -->
+<section class="page-break">
+<div class="kicker">Section 4</div>
+<h2 class="sec">How a candidate is scored</h2>
+<p class="lead">Each candidate's final score is a "fit" score multiplied by a series of reality-check
+multipliers. The multipliers are what keep traps out of the shortlist.</p>
+
+<div class="codeblock"><span class="cm"># the master formula</span>
+final = fit  ×  behavioural  ×  disqualifier  ×  honeypot  ×  stuffer</div>
+
+<div class="grid2">
+<div>
+<h3>"fit" = a weighted blend</h3>
+<table>
+  <tr><th>Signal</th><th style="width:22%">Weight</th></tr>
+  <tr><td>Title (current + career)</td><td>0.22</td></tr>
+  <tr><td>What they actually built</td><td>0.22</td></tr>
+  <tr><td>Career arc (product vs services)</td><td>0.14</td></tr>
+  <tr><td>Meaning match — retrieval focus</td><td>0.13</td></tr>
+  <tr><td>Meaning match — full job</td><td>0.11</td></tr>
+  <tr><td>Experience band (5–9 yrs)</td><td>0.10</td></tr>
+  <tr><td>Location</td><td>0.08</td></tr>
+</table>
+</div>
+<div>
+<h3>The multipliers (reality checks)</h3>
+<table>
+  <tr><th>Check</th><th style="width:34%">Effect</th></tr>
+  <tr><td>Behavioural availability</td><td>× 0.62 – 1.08</td></tr>
+  <tr><td>Computer-vision-only, no retrieval</td><td>× 0.55</td></tr>
+  <tr><td>Research-only, no production</td><td>× 0.60</td></tr>
+  <tr><td>Keyword-stuffer</td><td>× 0.25 – 0.40</td></tr>
+  <tr><td>Honeypot (impossible profile)</td><td>× 0.03</td></tr>
+</table>
+</div>
+</div>
+
+<!-- FLOWCHART 2: decision -->
+<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Calibri,sans-serif">
+  <defs>
+    <marker id="arT2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#00C2A8"/></marker>
+    <marker id="arR" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#F4795B"/></marker>
+  </defs>
+  <rect x="14" y="100" width="96" height="44" rx="8" fill="#1E2761"/>
+  <text x="62" y="120" fill="#fff" font-size="10.5" font-weight="700" text-anchor="middle">A candidate</text>
+  <text x="62" y="134" fill="#CADCFC" font-size="8.5" text-anchor="middle">full profile</text>
+  <line x1="110" y1="122" x2="130" y2="122" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT2)"/>
+
+  <rect x="132" y="96" width="120" height="52" rx="8" fill="#fff" stroke="#E2E8F2"/>
+  <text x="192" y="116" fill="#0F1B3C" font-size="10" font-weight="700" text-anchor="middle">Compute fit</text>
+  <text x="192" y="130" fill="#7C879B" font-size="8.3" text-anchor="middle">title · built · meaning</text>
+  <text x="192" y="141" fill="#7C879B" font-size="8.3" text-anchor="middle">exp · career · location</text>
+  <line x1="252" y1="122" x2="272" y2="122" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT2)"/>
+
+  <!-- decision diamonds row -->
+  <g font-size="8.6" text-anchor="middle">
+    <polygon points="320,96 360,122 320,148 280,122" fill="#FDEEE9" stroke="#F4795B"/>
+    <text x="320" y="119" fill="#0F1B3C" font-weight="700">Honeypot?</text>
+    <text x="320" y="131" fill="#7C879B" font-size="7.6">impossible</text>
+    <polygon points="430,96 470,122 430,148 390,122" fill="#FDEEE9" stroke="#F4795B"/>
+    <text x="430" y="119" fill="#0F1B3C" font-weight="700">Stuffer?</text>
+    <text x="430" y="131" fill="#7C879B" font-size="7.6">wrong title</text>
+    <polygon points="540,96 580,122 540,148 500,122" fill="#FDEEE9" stroke="#F4795B"/>
+    <text x="540" y="119" fill="#0F1B3C" font-weight="700">CV / research</text>
+    <text x="540" y="131" fill="#7C879B" font-size="7.6">only?</text>
+  </g>
+  <line x1="360" y1="122" x2="390" y2="122" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT2)"/>
+  <line x1="470" y1="122" x2="500" y2="122" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT2)"/>
+  <line x1="580" y1="122" x2="610" y2="122" stroke="#00C2A8" stroke-width="2" marker-end="url(#arT2)"/>
+
+  <!-- yes -> crush, downward -->
+  <text x="322" y="70" fill="#F4795B" font-size="8" text-anchor="middle">yes → ×0.03</text>
+  <line x1="320" y1="96" x2="320" y2="78" stroke="#F4795B" stroke-width="1.6" marker-end="url(#arR)"/>
+  <text x="432" y="70" fill="#F4795B" font-size="8" text-anchor="middle">yes → ×0.3</text>
+  <line x1="430" y1="96" x2="430" y2="78" stroke="#F4795B" stroke-width="1.6" marker-end="url(#arR)"/>
+  <text x="542" y="70" fill="#F4795B" font-size="8" text-anchor="middle">yes → ×0.55</text>
+  <line x1="540" y1="96" x2="540" y2="78" stroke="#F4795B" stroke-width="1.6" marker-end="url(#arR)"/>
+  <rect x="250" y="36" width="360" height="22" rx="6" fill="#FDEEE9" stroke="#F4795B"/>
+  <text x="430" y="51" fill="#B23A22" font-size="9" font-weight="700" text-anchor="middle">score crushed → drops out of the shortlist</text>
+
+  <!-- final -->
+  <rect x="612" y="100" width="96" height="44" rx="8" fill="#00C2A8"/>
+  <text x="660" y="120" fill="#0F1B3C" font-size="10.5" font-weight="700" text-anchor="middle">Final score</text>
+  <text x="660" y="134" fill="#0F1B3C" font-size="8.3" text-anchor="middle">× availability</text>
+
+  <text x="360" y="180" fill="#7C879B" font-size="9" text-anchor="middle">A clean, genuine candidate passes every check and keeps a high score; a trap gets multiplied down to near-zero.</text>
+</svg>
+<div class="figcap">Figure 2 — How one candidate is scored: fit first, then reality-check multipliers that filter traps.</div>
+
+<h3>Why this beats keyword matching</h3>
+<ul>
+  <li><b>Credit for AI skills is "gated" by credibility</b> — a buzzword in a Marketing Manager's skills
+  list earns almost nothing; the same word on a genuine engineer earns full weight.</li>
+  <li><b>Honeypots are caught by simple logic</b> — e.g. "8 years at a company that's 3 years old", or
+  "expert in 10 skills used for 0 months". These get multiplied to ×0.03 and disappear.</li>
+  <li><b>Meaning, not words</b> — the AI embedding recognises "ranking and retrieval systems that decide
+  what to show" as a perfect match even though it never says "RAG" or "Pinecone".</li>
+</ul>
+</section>
+
+<!-- ============================== 5. TECH STACK ============================== -->
+<section class="page-break">
+<div class="kicker">Section 5</div>
+<h2 class="sec">Technology stack</h2>
+<p class="lead">Deliberately lightweight and free: standard open-source Python libraries, a small local AI
+model, and no paid APIs anywhere in the ranking path.</p>
+
+<table>
+  <tr><th style="width:26%">Technology</th><th style="width:20%">Role</th><th>Why it's used here</th></tr>
+  <tr><td><b>Python 3</b></td><td>Core language</td><td>The whole system; clean, readable, easy to audit.</td></tr>
+  <tr><td><b>sentence-transformers</b><br><span class="small">all-MiniLM-L6-v2</span></td><td>AI "understanding"</td>
+      <td>Turns each profile into a meaning-vector so we can match by intent, not keywords. Small &amp; CPU-friendly.</td></tr>
+  <tr><td><b>PyTorch (CPU)</b></td><td>Runs the model</td><td>The engine under the embedding model; CPU-only build, no GPU needed.</td></tr>
+  <tr><td><b>FAISS</b></td><td>Vector index</td><td>Facebook's similarity-search library — the "vector database" path for fast retrieval.</td></tr>
+  <tr><td><b>NumPy</b></td><td>Math &amp; scoring</td><td>All the scoring is fast array math — this is why ranking takes seconds, not minutes.</td></tr>
+  <tr><td><b>scikit-learn</b></td><td>Fallback search</td><td>TF-IDF backup so the system still runs even without the embedding model present.</td></tr>
+  <tr><td><b>Streamlit</b></td><td>Demo web app</td><td>The interactive "sandbox" where you upload a sample and see it ranked live.</td></tr>
+  <tr><td><b>python-pptx</b></td><td>Docs</td><td>Generates the approach slide deck programmatically.</td></tr>
+</table>
+
+<div class="callout"><b>Key design choice:</b> the heavy AI work (embedding 100K profiles) happens
+<b>once, offline</b>. The part you run for each job is pure fast math over the saved index — which is why
+it meets a strict "5 minutes, CPU-only, no internet" production budget.</div>
+
+<h3>The "hybrid" in plain terms</h3>
+<div class="grid2">
+  <div class="card"><b style="color:var(--teal)">Dense / semantic side</b>
+  <p class="small" style="margin-top:4px">The AI model gives <b>recall</b> — it finds good people even when
+  they don't use the expected words.</p></div>
+  <div class="card"><b style="color:var(--cyan)">Structured / rules side</b>
+  <p class="small" style="margin-top:4px">The hand-built fit model + guards give <b>precision</b> — they
+  keep fakes, wrong-domain, and unavailable people out of the top.</p></div>
+</div>
+</section>
+
+<!-- ============================== 6. STRUCTURE ============================== -->
+<section class="page-break">
+<div class="kicker">Section 6</div>
+<h2 class="sec">Project structure</h2>
+<p class="lead">Every file has one clear job. The <code>src/</code> folder holds the brain; the top-level
+scripts are what you actually run.</p>
+
+<div class="tree">C:\hackathon\
+├─ <span class="c">rank.py</span>                 <span class="m"># ► MAIN: produces the top-100 submission.csv</span>
+├─ <span class="c">build_index.py</span>          <span class="m"># offline: builds the AI embedding index (run once)</span>
+├─ <span class="c">app.py</span>                  <span class="m"># Streamlit demo / sandbox web app</span>
+├─ <span class="c">validate_submission.py</span>  <span class="m"># official format checker</span>
+├─ requirements.txt         <span class="m"># the libraries to install</span>
+├─ README.md                <span class="m"># setup + reproduce instructions</span>
+├─ submission_metadata.yaml <span class="m"># team / approach declaration</span>
+│
+├─ <span class="c">src\</span>                    <span class="m"># the scoring brain</span>
+│  ├─ jd_spec.py            <span class="m"># the job description distilled into rules &amp; keywords</span>
+│  ├─ profile.py            <span class="m"># reads a candidate, builds its text + fields</span>
+│  ├─ semantic.py           <span class="m"># the AI meaning-match (embeddings + fallback)</span>
+│  ├─ features.py           <span class="m"># structured fit: title, what-they-built, experience…</span>
+│  ├─ integrity.py          <span class="m"># honeypot + keyword-stuffer detection</span>
+│  ├─ behavioral.py         <span class="m"># 23 platform signals → availability multiplier</span>
+│  ├─ reasoning.py          <span class="m"># writes the honest 1-2 sentence reason per pick</span>
+│  ├─ scoring.py            <span class="m"># blends everything into the final score</span>
+│  └─ ranker.py             <span class="m"># orchestrates: load → score → sort → write</span>
+│
+├─ <span class="c">artifacts\</span>              <span class="m"># pre-computed (built by build_index.py)</span>
+│  ├─ embeddings.f16.npy    <span class="m"># the 100K meaning-vectors</span>
+│  └─ candidate_ids.npy / jd_vectors.npy
+│
+├─ <span class="c">docs\</span>                   <span class="m"># approach_deck.pdf + this project_guide.pdf</span>
+└─ tests\                   <span class="m"># trap-defense sanity checks</span>
+</div>
+
+<div class="callout"><b>Mental model:</b> <code>rank.py</code> is the button you press. It calls
+<code>src/ranker.py</code>, which uses every other <code>src/</code> file as a specialist
+(meaning, fit, fraud, availability, reasoning) and writes <code>submission.csv</code>.</div>
+</section>
+
+<!-- ============================== 7. HOW TO RUN ============================== -->
+<section class="page-break">
+<div class="kicker">Section 7</div>
+<h2 class="sec">How &amp; where to run it</h2>
+
+<h3>Where it runs (platforms)</h3>
+<table>
+  <tr><th style="width:24%">Platform</th><th>Status</th></tr>
+  <tr><td><b>Windows / macOS / Linux</b></td><td>✅ Any laptop or desktop with Python 3 — this is the normal way.</td></tr>
+  <tr><td><b>Hardware needed</b></td><td>✅ Ordinary <b>CPU</b>, ~16 GB RAM. <b>No GPU and no internet</b> needed for ranking.</td></tr>
+  <tr><td><b>Cloud notebooks</b></td><td>✅ Google Colab / Jupyter / Binder — clone and run the same commands.</td></tr>
+  <tr><td><b>Hosted sandbox</b></td><td>✅ <code>app.py</code> deploys to Hugging Face Spaces or Streamlit Cloud (free tiers).</td></tr>
+  <tr><td><b>Docker</b></td><td>✅ Runs in any standard Python container.</td></tr>
+</table>
+
+<h3>The commands (Windows PowerShell)</h3>
+<p>Open PowerShell and go to the project. Set the path to the candidate file once so you don't retype it:</p>
+<div class="codeblock"><span class="cm"># 0) go to the project + point at the data file</span>
+cd C:\hackathon
+$cands = "C:\Users\akash\Downloads\[PUB] India_runs_data_and_ai_challenge\[PUB] India_runs_data_and_ai_challenge\India_runs_data_and_ai_challenge\candidates.jsonl"</div>
+
+<p><b>▶ Normal run</b> — the embeddings are already built, so this just produces the shortlist (~37 s):</p>
+<div class="codeblock"><span class="cm"># 1) produce the ranked top-100</span>
+python rank.py --candidates $cands --out submission.csv
+
+<span class="cm"># 2) check the file is valid</span>
+python validate_submission.py submission.csv</div>
+
+<p><b>↻ Full rebuild from scratch</b> — only if you want to regenerate the AI index (~20 min, one time):</p>
+<div class="codeblock">pip install -r requirements.txt
+python build_index.py --candidates $cands        <span class="cm"># builds artifacts\ (offline)</span>
+python rank.py --candidates $cands --out submission.csv</div>
+
+<p><b>🖥 Interactive demo</b> — opens a web app at <code>http://localhost:8501</code> to rank a sample live:</p>
+<div class="codeblock">streamlit run app.py</div>
+
+<div class="warn"><b>If you move the project</b> or use a different data location, just change the
+<code>$cands</code> path. On macOS/Linux the commands are identical except you'd write
+<code>cands="/path/to/candidates.jsonl"</code> and use <code>$cands</code> the same way.</div>
+</section>
+
+<!-- ============================== 8. OUTPUT + CHEATSHEET ============================== -->
+<section class="page-break">
+<div class="kicker">Section 8</div>
+<h2 class="sec">What it produces &amp; quick reference</h2>
+
+<h3>The output: <code>submission.csv</code></h3>
+<p>Exactly 100 rows — best fit first — with four columns:</p>
+<table>
+  <tr><th>candidate_id</th><th>rank</th><th>score</th><th>reasoning</th></tr>
+  <tr><td>CAND_0018499</td><td>1</td><td>0.9900</td><td>Senior ML Engineer with 7 yrs (Zomato, Google); direct ranking &amp; embeddings experience…</td></tr>
+  <tr><td>CAND_0064326</td><td>2</td><td>0.7962</td><td>Search Engineer with 8 yrs (Sarvam AI); direct ranking + recommendation systems experience…</td></tr>
+  <tr><td>CAND_0002025</td><td>3</td><td>0.7901</td><td>Senior AI Engineer with 6 yrs (Apple); direct ranking + recommendation experience…</td></tr>
+</table>
+
+<h3>Proof it works (on the released pool)</h3>
+<div class="statrow">
+  <div class="stat"><div class="big">100%</div><div class="lbl">engineering titles in top 100</div></div>
+  <div class="stat"><div class="big">86/100</div><div class="lbl">in the ideal 5–9 yr band</div></div>
+  <div class="stat"><div class="big">0</div><div class="lbl">honeypots &amp; 0 fakes in top 100</div></div>
+  <div class="stat"><div class="big">37 s</div><div class="lbl">CPU only, no internet</div></div>
+</div>
+
+<h3>One-glance cheat sheet</h3>
+<table>
+  <tr><th style="width:34%">I want to…</th><th>Run this</th></tr>
+  <tr><td>Produce the shortlist</td><td class="mono">python rank.py --candidates $cands --out submission.csv</td></tr>
+  <tr><td>Check the output format</td><td class="mono">python validate_submission.py submission.csv</td></tr>
+  <tr><td>Rebuild the AI index</td><td class="mono">python build_index.py --candidates $cands</td></tr>
+  <tr><td>Open the live demo</td><td class="mono">streamlit run app.py</td></tr>
+  <tr><td>Install dependencies</td><td class="mono">pip install -r requirements.txt</td></tr>
+</table>
+
+<div class="callout"><b>In one line:</b> this project reads 100,000 résumés, understands them with AI,
+weeds out the fakes, respects who's actually available, and hands a recruiter a trustworthy, explained
+top-100 — in under a minute, on a normal laptop, with no paid AI calls.</div>
+
+<p class="small" style="margin-top:16px;text-align:center">Redrob Candidate Ranker · Project Guide ·
+Generated from the working codebase in <code>C:\hackathon</code>.</p>
+</section>
+
+</body>
+</html>
