@@ -39,3 +39,6 @@ docs/guide_png/
 data/
 docs/tpl_png/
 docs/sub_png/
+
+# office lock/temp files
+~$*
