@@ -25,7 +25,7 @@ BODY_FONT = "Manrope"
 TEAM_NAME = "Team-Phoenix"
 TEAM_LEADER = "Akash Boddula"
 GITHUB = "github.com/akashboddula2425-hub/AI-candidate-ranking-system"
-SANDBOX = "Run locally — streamlit run app.py  (hosted Space optional; see README)"
+SANDBOX = "Live (GitHub Pages): akashboddula2425-hub.github.io/AI-candidate-ranking-system"
 
 prs = Presentation(SRC)
 

@@ -4,6 +4,9 @@ A hybrid (dense-semantic + structured-reasoning) ranker that shortlists the top 
 candidates from a 100,000-profile pool for the released **Senior AI Engineer — Founding
 Team** job description.
 
+**▶ Live in-browser demo:** https://akashboddula2425-hub.github.io/AI-candidate-ranking-system/
+— runs the whole ranker client-side (no server). Source in [`web/`](web/).
+
 It is built around one idea: **rank candidates the way a great recruiter would — by
 understanding what the role *means*, not by counting keywords.** The system reads the
 whole profile (career history, what they actually built, behavioural signals,

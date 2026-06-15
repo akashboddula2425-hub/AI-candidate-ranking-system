@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phoenix · Candidate Ranker</title>
+<style>
+  :root{ --lime:#C5F24E; --purple:#A78BFA; --bg:#0F1115; --panel:#181B22; --border:#2A2F3A;
+         --text:#E7EAF0; --muted:#8A93A5; --red:#FF6B5B; }
+  *{ box-sizing:border-box; margin:0; }
+  body{ background:var(--bg); color:var(--text); font-family:Inter,'Segoe UI',system-ui,sans-serif; display:flex; min-height:100vh; }
+  a{ color:inherit; }
+  .sb{ width:250px; flex:0 0 250px; background:#0A0B0E; border-right:1px solid var(--border); padding:18px; }
+  .main{ flex:1; padding:22px 28px; min-width:0; }
+  .brand{ display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .logo{ width:34px; height:34px; border-radius:10px; background:var(--lime); color:#0A0B0E;
+         font-weight:900; font-size:1.2rem; display:flex; align-items:center; justify-content:center; }
+  .navitem{ padding:10px 12px; border-radius:11px; color:var(--muted); font-weight:600; font-size:.92rem; margin:3px 0; }
+  .navitem.on{ background:#fff; color:#0A0B0E; }
+  .card{ background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:16px 18px; }
+  .status{ margin-bottom:14px; color:var(--lime); font-weight:600; font-size:.9rem; }
+  label.lbl{ color:var(--muted); font-size:.74rem; display:block; margin:14px 0 6px; letter-spacing:.04em; }
+  input[type=file]{ font-size:.78rem; color:var(--muted); width:100%; }
+  input[type=file]::file-selector-button{ background:var(--panel); color:var(--text); border:1px solid var(--border);
+    border-radius:9px; padding:7px 12px; margin-right:10px; cursor:pointer; }
+  input[type=range]{ width:100%; accent-color:var(--lime); }
+  .btn{ background:var(--lime); color:#0A0B0E; border:none; border-radius:11px; padding:9px 14px;
+        font-weight:700; cursor:pointer; width:100%; margin-top:8px; }
+  .stat{ background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:16px 18px;
+         height:120px; display:flex; flex-direction:column; justify-content:space-between; }
+  .stat .lbl{ color:var(--muted); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; display:flex; justify-content:space-between; }
+  .stat .big{ font-size:2.5rem; font-weight:800; line-height:1; } .stat .sub{ color:var(--muted); font-size:.74rem; }
+  .pill{ font-size:.62rem; font-weight:700; padding:3px 9px; border-radius:20px; }
+  .muted{ color:var(--muted); }
+  .crow{ background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:13px 16px; margin-bottom:10px; }
+  .rankbadge{ width:38px; height:38px; border-radius:11px; background:#22262F; color:var(--lime);
+              font-weight:800; display:flex; align-items:center; justify-content:center; flex:0 0 38px; }
+  .bar{ height:7px; border-radius:6px; background:#22262F; overflow:hidden; }
+  .bar>i{ display:block; height:100%; background:linear-gradient(90deg,var(--purple),var(--lime)); }
+  .chip{ font-size:.62rem; font-weight:700; padding:2px 8px; border-radius:8px; }
+  .mbar{ display:flex; align-items:center; gap:8px; margin:7px 0; font-size:.8rem; }
+  .mbar .t{ flex:0 0 130px; color:var(--muted); }
+  .mbar .b{ flex:1; height:9px; border-radius:6px; background:#22262F; overflow:hidden; }
+  .mbar .b>i{ display:block; height:100%; background:var(--purple); }
+  .mbar .v{ flex:0 0 28px; text-align:right; font-weight:700; }
+  .statgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .grid{ display:grid; grid-template-columns:2.1fr 1fr; gap:16px; align-items:start; }
+  .scroll{ max-height:640px; overflow-y:auto; padding-right:6px; }
+  .scroll::-webkit-scrollbar{ width:8px; } .scroll::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
+  .statgrid>*, .grid>*{ min-width:0; }   /* let cards shrink, never overflow */
+  /* collapse the inner grids before touching the sidebar, so the dashboard keeps
+     its sidebar on normal laptop windows and only goes single-column when needed */
+  @media (max-width:1100px){ .statgrid{ grid-template-columns:repeat(2,1fr);} .grid{ grid-template-columns:1fr;} }
+  @media (max-width:760px){ .sb{ display:none; } .main{ padding:18px 16px; } }
+</style>
+</head>
+<body>
+  <aside class="sb">
+    <div class="brand"><div class="logo">✦</div>
+      <div><div style="font-weight:800">Phoenix</div><div class="muted" style="font-size:.7rem">Candidate Ranker</div></div></div>
+    <div class="navitem on">▦&nbsp; Dashboard</div>
+    <div class="navitem">◍&nbsp; Candidates</div>
+    <div class="navitem">▤&nbsp; Reports</div>
+    <div class="navitem">⚙&nbsp; About</div>
+
+    <label class="lbl">CANDIDATE SAMPLE (.jsonl / .json)</label>
+    <input type="file" id="file" accept=".json,.jsonl,.txt">
+    <button class="btn" id="loadSample" style="background:var(--panel);color:var(--text);border:1px solid var(--border)">↻ Load bundled sample</button>
+
+    <label class="lbl">SHORTLIST SIZE · <span id="topkval">12</span></label>
+    <input type="range" id="topk" min="5" max="50" value="12">
+
+    <div class="card" style="margin-top:16px;padding:13px 15px">
+      <div style="color:var(--lime);font-weight:700;font-size:.78rem;margin-bottom:5px">HOW IT WORKS</div>
+      <div class="muted" style="font-size:.74rem;line-height:1.5">Dense semantic match (runs the model in your browser)
+      + structured recruiter-style fit + honeypot/stuffer guards + behavioural availability → one explainable score.</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div><div style="font-size:2rem;font-weight:800;letter-spacing:-.02em">Candidate Ranking — Overview</div>
+        <div class="muted" style="margin-top:2px">Team Phoenix · ranking talent by genuine fit, not keywords</div></div>
+      <span class="pill" style="background:var(--panel);border:1px solid var(--border);color:var(--muted)">JD · Senior AI Engineer</span>
+    </div>
+
+    <div id="status"></div>
+    <div class="statgrid" id="stats"></div>
+    <div class="grid">
+      <div>
+        <div style="font-weight:700;margin-bottom:10px">Ranked shortlist <span class="muted" style="font-weight:400">· best fit first</span></div>
+        <div class="scroll" id="shortlist"></div>
+        <div id="downloadWrap" style="display:none;margin-top:10px">
+          <button class="btn" onclick="window.__dl()">⬇  Download ranked CSV</button>
+        </div>
+      </div>
+      <div id="panels"></div>
+    </div>
+    <div class="muted" style="margin-top:22px;font-size:.72rem">
+      Runs 100% in your browser · model: all-MiniLM-L6-v2 via transformers.js · no server, no data leaves your machine.
+    </div>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
