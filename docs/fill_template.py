@@ -22,10 +22,10 @@ RED = RGBColor(0xD8, 0x4A, 0x32)
 BODY_FONT = "Manrope"
 
 # ---------- placeholders the user must confirm ----------
-TEAM_NAME = "Team Phoenix"
+TEAM_NAME = "Team-Phoenix"
 TEAM_LEADER = "Akash Boddula"
-GITHUB = "«GITHUB REPO URL»"
-SANDBOX = "«SANDBOX / DEMO URL (e.g. HuggingFace Space)»"
+GITHUB = "github.com/akashboddula2425-hub/AI-candidate-ranking-system"
+SANDBOX = "Run locally — streamlit run app.py  (hosted Space optional; see README)"
 
 prs = Presentation(SRC)
 
@@ -241,7 +241,7 @@ set_bullets(b, [
 _, b = body_shape(S[9], "Submission Assets")
 set_bullets(b, [
     ("GitHub repository:", GITHUB + "  (code, README, requirements, reproduce command)."),
-    ("Sandbox / demo:", SANDBOX + "  — or run locally with  streamlit run app.py."),
+    ("Sandbox / demo:", SANDBOX),
     ("Ranked output:", "submission.csv  (top 100 candidates, validated format)."),
     ("Reproduce command:", "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"),
     ("Documentation:", "approach deck + detailed project guide (PDF) included in /docs."),
