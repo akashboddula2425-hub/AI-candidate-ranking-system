@@ -34,3 +34,6 @@ node_modules/
 # claude code session data
 .claude/
 docs/guide_png/
+
+# local scratch working dir (test subsets, run logs)
+data/
