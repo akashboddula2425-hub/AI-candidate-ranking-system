@@ -21,7 +21,7 @@ team_members:
 # ============================================================================
 github_repo: "https://github.com/akashboddula2425-hub/AI-candidate-ranking-system"
 
-sandbox_link: "TODO-deploy app.py to HuggingFace Spaces / Streamlit Cloud (local: streamlit run app.py)"
+sandbox_link: "https://akashboddula2425-hub.github.io/AI-candidate-ranking-system/"
 
 reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
 
