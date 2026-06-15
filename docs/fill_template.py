@@ -22,7 +22,7 @@ RED = RGBColor(0xD8, 0x4A, 0x32)
 BODY_FONT = "Manrope"
 
 # ---------- placeholders the user must confirm ----------
-TEAM_NAME = "«TEAM NAME / ID»"
+TEAM_NAME = "Team Phoenix"
 TEAM_LEADER = "Akash Boddula"
 GITHUB = "«GITHUB REPO URL»"
 SANDBOX = "«SANDBOX / DEMO URL (e.g. HuggingFace Space)»"

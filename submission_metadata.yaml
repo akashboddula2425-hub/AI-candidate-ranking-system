@@ -4,17 +4,17 @@
 # ============================================================================
 # Team identity
 # ============================================================================
-team_name: "TODO-your-team-name"
+team_name: "Team Phoenix"
 
 primary_contact:
-  name: "TODO-your-full-name"
+  name: "Akash Boddula"
   email: "akashboddula2425@gmail.com"
   phone: "TODO-+91-XXXXXXXXXX"
 
 team_members:
-  - name: "TODO-your-full-name"
+  - name: "Akash Boddula"
     email: "akashboddula2425@gmail.com"
-    role: "ML Engineer"
+    role: "ML Engineer / Team Lead"
 
 # ============================================================================
 # Code and reproducibility
