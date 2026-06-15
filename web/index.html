@@ -47,7 +47,11 @@
   .grid{ display:grid; grid-template-columns:2.1fr 1fr; gap:16px; align-items:start; }
   .scroll{ max-height:640px; overflow-y:auto; padding-right:6px; }
   .scroll::-webkit-scrollbar{ width:8px; } .scroll::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
-  @media (max-width:980px){ .statgrid{ grid-template-columns:repeat(2,1fr);} .grid{ grid-template-columns:1fr;} .sb{ display:none;} }
+  .statgrid>*, .grid>*{ min-width:0; }   /* let cards shrink, never overflow */
+  /* collapse the inner grids before touching the sidebar, so the dashboard keeps
+     its sidebar on normal laptop windows and only goes single-column when needed */
+  @media (max-width:1100px){ .statgrid{ grid-template-columns:repeat(2,1fr);} .grid{ grid-template-columns:1fr;} }
+  @media (max-width:760px){ .sb{ display:none; } .main{ padding:18px 16px; } }
 </style>
 </head>
 <body>
